@@ -39,15 +39,16 @@ class WeatherDataEntry:
 
 
 class SMHIHelper:
-    def __init__(self, lon: float, lat: float, tz: timezone = pytz.utc) -> None:
+    def __init__(self, lon: float, lat: float, tz: timezone = pytz.UTC) -> None:
         self.lon = lon
         self.lat = lat
         self.hourly_forecasts = {}
         self.tz = tz
 
     def date_str_to_datetime(self, date_str: str) -> datetime:
-        datetime_object = datetime.strptime(date_str, "%Y-%m-%dT%H:%M:%SZ")
-        return datetime_object.astimezone(self.tz)
+        datetime_object = pytz.utc.localize(datetime.strptime(date_str, "%Y-%m-%dT%H:%M:%SZ"))
+        datetime_as_utc = datetime_object.astimezone(self.tz)
+        return datetime_as_utc
 
     def SMHI_timeSeries_object_to_WeatherDataEntry(
         self,
@@ -172,7 +173,7 @@ class SMHIHelper:
         forecast_data = self.get_hourly_forecasts_for_date(date=date)
         datetime_series = [key for key in forecast_data]
         min_hour = min([date.hour for date in datetime_series])
-        if min_hour > 12:
+        if min_hour > 14:
             symbol = forecast_data[datetime_series[0]].wsymb2
             ws = forecast_data[datetime_series[0]].ws
             wd = forecast_data[datetime_series[0]].wd

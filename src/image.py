@@ -286,7 +286,7 @@ class ForecastCard:
             height_position,
             "->",
             self.emoji_font,
-            self.forecast_entry.wd.value,
+            -self.forecast_entry.wd.value,
         )
 
         return self.card
