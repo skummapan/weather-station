@@ -18,6 +18,33 @@ PALLET = np.array(
 ).astype(np.uint8)
 
 
+def pixel_to_hex(pixel):
+    tmp = pixel.astype(np.uint32)
+    return (tmp[0] << 16) + (tmp[1] << 8) + tmp[2]
+
+
+PALLET_TO_CODE_MAP = {
+    pixel_to_hex(PALLET[0]): 0x0,  # Black
+    pixel_to_hex(PALLET[1]): 0x1,  # White
+    pixel_to_hex(PALLET[2]): 0x2,  # Green
+    pixel_to_hex(PALLET[3]): 0x3,  # Blue
+    pixel_to_hex(PALLET[4]): 0x4,  # Red
+    pixel_to_hex(PALLET[5]): 0x5,  # Yellow
+    pixel_to_hex(PALLET[6]): 0x6,  # Orange
+}
+
+
+def pixel_to_code(pixel):
+    return PALLET_TO_CODE_MAP[pixel_to_hex(find_closest_palette_color(pixel, PALLET))]
+
+
+def image_to_byte_array(image: Image) -> bytearray:
+    tmp = b""
+    for pixel in np.asanyarray(image):
+        tmp += bytes(pixel_to_code(pixel))
+    return tmp
+
+
 def find_closest_palette_color(pixel: np.ndarray, pallet):
     idx = np.argmin([np.linalg.norm(pixel - color) for color in pallet])
     return pallet[idx]

@@ -7,7 +7,7 @@ from http.server import SimpleHTTPRequestHandler
 from socket import socket
 from datetime import date, timedelta, timezone
 
-from image import ForecastCard
+from image import ForecastCard, image_to_byte_array
 
 from PIL import Image
 from weather import SMHIHelper
@@ -29,15 +29,8 @@ Test page...success.
 
 
 class HTTPHandler(SimpleHTTPRequestHandler):
-    """This handler uses server.base_path instead of always using os.getcwd()"""
-
-    def translate_path(self, path):
-        path = SimpleHTTPRequestHandler.translate_path(self, path)
-        relpath = os.path.relpath(path, os.getcwd())
-        fullpath = os.path.join(self.server.base_path, relpath)
-        return fullpath
-
     def do_GET(self):
+        logger.info("get request on: %s", str(self.path))
         if self.path == "/image":
             with open(self.directory + "/generated/image.png", "rb") as f:
                 image = f.read()
@@ -46,7 +39,7 @@ class HTTPHandler(SimpleHTTPRequestHandler):
                 self.send_header("Content-length", len(image))
                 self.end_headers()
                 self.wfile.write(image)
-        else:
+        elif self.path == "/data":
             self.send_response(200)
             self.send_header("Content-type", "text/html")
             self.send_header("Content-length", len(DUMMY_RESPONSE))
@@ -82,6 +75,7 @@ class WeatherDisplay:
         self.weather.fetch()
 
     def update_display(self) -> Image:
+        logger.info("Fetching data and generating image")
         self.fetch_data()
 
         image = self.card = Image.new("RGB", (self.width, self.height), self.bg_color)
@@ -105,7 +99,10 @@ if __name__ == "__main__":
         number_of_days=3,
         tz=pytz.timezone("Europe/Stockholm"),
     )
-    display.update_display()
+    logging.basicConfig(level=logging.DEBUG)
+    image = display.update_display()
+    image.save("generated/image.png")
     web_dir = os.path.join(os.path.dirname(__file__), "my_dir")
     httpd = HTTPServer(web_dir, ("", 8000))
+    logger.info(image_to_byte_array(image))
     httpd.serve_forever()
