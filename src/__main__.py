@@ -101,7 +101,7 @@ if __name__ == "__main__":
     )
     logging.basicConfig(level=logging.DEBUG)
     image = display.update_display()
-    image.save("generated/image.png")
+    image.save("/app/generated/image.png")
     web_dir = os.path.join(os.path.dirname(__file__), "my_dir")
     httpd = HTTPServer(web_dir, ("", 8000))
     logger.info(image_to_byte_array(image))

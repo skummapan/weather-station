@@ -138,7 +138,7 @@ class ForecastCard:
         self.outer_margin = outer_margin
         self.outer_radius = outer_radius
         self.bg_color = bg_color
-        self.font_path = "src/font/"
+        self.font_path = "font/"
         self.font = ImageFont.truetype(
             self.font_path + "FiraCodeNerdFontPropo-Regular.ttf", 25
         )
@@ -261,9 +261,7 @@ class ForecastCard:
         h = center_text(self.draw, height_position, message, self.emoji_font)
         height_position = height_position + h + margin
 
-        icon = Image.open(f"src/img/{self.forecast_entry.symbol.code}.png").convert(
-            "RGBA"
-        )
+        icon = Image.open(f"img/{self.forecast_entry.symbol.code}.png").convert("RGBA")
 
         new_icon = Image.new("RGBA", icon.size, "WHITE")
         new_icon.paste(icon, (0, 0), icon)
