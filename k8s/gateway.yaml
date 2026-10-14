@@ -1,0 +1,24 @@
+apiVersion: gateway.networking.k8s.io/v1
+kind: Gateway
+metadata:
+  name: weather-station-gateway
+  namespace: weather-station
+  annotations:
+    cert-manager.io/cluster-issuer: letsencrypt-prod
+spec:
+  gatewayClassName: envoy-gatewayclass
+  listeners:
+    - name: http
+      protocol: HTTP
+      port: 80
+      hostname: weather-station.skumble.net
+    - name: https
+      protocol: HTTPS
+      port: 443
+      hostname: weather-station.skumble.net
+      tls:
+        mode: Terminate
+        certificateRefs:
+          - name: weather-station-skumble-net-tls
+            kind: Secret
+            group: ""

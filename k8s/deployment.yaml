@@ -1,0 +1,20 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: weather-station
+  namespace: weather-station
+spec:
+  selector:
+    matchLabels:
+      app: weather-station
+  template:
+    metadata:
+      labels:
+        app: weather-station
+    spec:
+      containers:
+        - name: weather-station
+          image: docker.skumble.net/weather-station:0.1
+          ports:
+            - containerPort: 8000
+          imagePullPolicy: Always

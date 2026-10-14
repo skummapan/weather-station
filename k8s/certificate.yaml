@@ -1,0 +1,12 @@
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: weather-station-skumble-net-tls
+  namespace: weather-station
+spec:
+  secretName: weather-station-skumble-net-tls
+  issuerRef:
+    name: letsencrypt-prod
+    kind: ClusterIssuer
+  dnsNames:
+    - weather-station.skumble.net

@@ -1,0 +1,17 @@
+<div class="forecast-card">
+    <h3 class="fit-text">{{ forecast.date.strftime('%A').title() }}</h3>
+    <p class="fit-text">{{ forecast.date.strftime('%d %b') }}</p>
+
+    <img class="forecast-icon"
+        src="/static/img/{% if dither %}dithered{% else %}original{% endif %}/{{ forecast.symbol.code }}.png"
+        alt="Weather Icon">
+
+    <p class="fit-text">{{ forecast.t | max | round }}°</p>
+    <p class="fit-text-small">{{ forecast.t | min | round }}°</p>
+
+    <p class="fit-text">{{ forecast.pmean | sum | round(1) }} mm</p>
+    <p class="fit-text">{{ forecast.ws.value | round(1) }} {{ forecast.ws.unit }}</p>
+    <p class="fit-text-small">({{ forecast.gust.value | round(1) }}) {{ forecast.gust.unit }}</p>
+
+    <div class="fit-text" class="rotated-arrow" style="transform: rotate({{ -forecast.wd.value - 90 }}deg);">→</div>
+</div>

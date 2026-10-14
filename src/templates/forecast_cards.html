@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Weather Forecast</title>
+    <link rel="stylesheet" href="/static/css/forecast.css">
+    <link id="favicon" rel="icon" type="image/x-icon" href="static/favicon.ico">
+    <script src="https://cdn.jsdelivr.net/npm/fitty@2.3.6/dist/fitty.min.js"></script>
+</head>
+
+<body>
+    <div class="forecast-container">
+        {% for forecast in forecasts %}
+        {% include "forecast_card.html" %}
+        {% endfor %}
+    </div>
+    <script>
+        document.addEventListener("DOMContentLoaded", () => {
+            fitty('.fit-text', {
+                observeMutations: { subtree: true, childList: true },
+                minSize: 12,
+                maxSize: 48,
+                multiLine: false,
+                observeWindow: true
+            });
+
+            fitty('.fit-text-small', {
+                observeMutations: { subtree: true, childList: true },
+                minSize: 10,
+                maxSize: 35,
+                multiLine: false,
+                observeWindow: true
+            });
+        });
+    </script>
+</body>
+
+</html>

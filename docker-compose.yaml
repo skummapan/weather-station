@@ -1,0 +1,7 @@
+services:
+  weather-station:
+    container_name: weather-station
+    image: docker.skumble.net/weather-station:0.1
+    restart: unless-stopped
+    ports:
+      - 8000:8000
